@@ -1,0 +1,3 @@
+/home/lukasz/CLionProjects/Figura/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/lukasz/CLionProjects/Figura/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/lukasz/CLionProjects/Figura/cmake-build-debug/CMakeFiles/Figura.dir

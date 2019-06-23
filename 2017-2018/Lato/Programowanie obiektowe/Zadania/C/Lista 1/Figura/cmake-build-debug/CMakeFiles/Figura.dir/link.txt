@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/Figura.dir/main.c.o CMakeFiles/Figura.dir/figura.c.o  -o Figura 

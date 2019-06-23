@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>index</title>
+<style>
+
+div{
+    background-color: yellow;
+    border-color: black;
+    border-style: solid;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 100px;
+}
+div:nth-of-type(2){
+    
+    flex-grow: 2;
+}
+.flex {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    border-style: hidden
+}
+</style>
+
+</head>
+<body>
+<div class="flex">
+    <div>
+    first one
+    </div>
+    <div>
+    second one
+    </div>
+    <div>
+    third one
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Photo animations</title>
+<style>
+
+.txtBlurBG {
+    position: relative;
+    display: inline-block;
+    width: 300px;
+    height: 200px;
+    transition: .3s ease-in-out;
+}
+
+.txtBlurBg > img{
+    width: 300px;
+    height: 200px;
+    transition: .3s ease-in-out;
+}
+.txtBlurBg:hover > img{
+    filter: blur(5px);
+    
+    
+}
+
+.txtBlurBG > :not(img){
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: .3s ease-in-out;
+}
+
+.txtBlurBg:hover > :not(img){
+    opacity: 1;
+}
+
+</style>
+</head>
+<body>
+
+<div class="txtBlurBG">
+    <img src="1.jpg">
+    <h1> Hey </h1>
+</div>
+
+
+
+</body>
+</html>

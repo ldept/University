@@ -1,0 +1,16 @@
+main.c - deklaracja zmiennych globalnych, inicjalizacja allegro, funkcja main i główna pętla gry.
+
+common.h - globalne zmienne (zadeklarowane w main.c) oraz struktury używane w innych funkcjach.
+
+game_modes.c - zawiera funkcje odpowiadające poszczególnym trybom gry i podmenu (tj. opcje i najwyższe wyniki);
+
+draw.c - zawiera funkcje służące do rysowania elementów interfejsu.
+
+update.c - zawiera funkcje służące do zmieniania położenia obiektów, zapisu i odczytu z pliku, oraz
+inicjalizacji zmiennych.
+
+draw.h, update.h, game_modes.h - zawierają prototypy funkcji opisanych w, kolejno, draw.c, update.c i game_modes.c
+
+
+Poszczególne funkcje zawarte w kodzie zawierają komentarze odnośnie ich przeznaczenia (chyba, że nazwa funkcji sama wskazuje na jej zastosowanie).
+

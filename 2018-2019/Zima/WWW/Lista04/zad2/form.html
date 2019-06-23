@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formularz</title>
+    <script src="formcheck.js"></script>
+</head>
+<body>
+<form id="myForm">
+    <!-- Alternatywnie: ustawić dla daty type="date" z odpowiednim max (tylko jaki? - no i ważniejszy problem
+        jak walidować z peselem?) i dla email type="email" potem dla nich required - czy to by było unobtrusive js?
+        (a raczej czy to wszystko, a głównie required (<- jak to działa? przeglądarka waliduje = unobtrusive js?) są atrybuty html?),
+        no i kolejny problem spójności tj. nrKonta i pesel walidują się przez skrypt, a date i email przez przeglądarkę
+        (czy da się jakoś htmlem określić, że tekst ma być liczbą? //number kiepsko wygląda do takiego użytku,
+        a dla text wiem tylko jak określić długość - minlength i maxlength (tu to samo pytanie co do required)
+        -->
+    Nr konta: <br>
+    <input type="text" name="nrKonta" id="nrKonta" title="Nr Konta" > <br> <br>
+    Nr PESEL: <br>
+    <input type="text" name="pesel" id="pesel" title="Nr PESEL" > <br> <br>
+    Data urodzenia: <br>
+    <input type="text" name="data" id="data" title="Data urodzenia" placeholder="dd/mm/yyyy"> <br> <br>
+    e-mail: <br>
+    <input type="text" name="email" id="email" title="e-mail" > <br> <br>
+    <input type="submit" id="submit" value="Sumbit">
+</form>
+</body>
+</html>

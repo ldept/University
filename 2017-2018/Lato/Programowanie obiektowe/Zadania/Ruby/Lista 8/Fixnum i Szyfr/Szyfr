@@ -1,0 +1,48 @@
+class Jawna
+
+  def initialize(napis)
+    @napis = napis
+  end
+
+  def printNapis
+    @napis
+  end
+
+  def to_s
+    "#{@napis}"
+  end
+  def zaszyfruj(klucz)
+    napis = ""
+
+    for i in 0..@napis.length
+      napis += "#{klucz["#{@napis[i]}"]}"
+    end
+
+    Zaszyfrowane.new(napis)
+
+  end
+end
+class Zaszyfrowane
+  def initialize(napis)
+    @napis = napis
+  end
+
+  def to_s
+    "#{@napis}"
+  end
+  def odszyfruj(klucz)
+
+    napis = ""
+    for i in 0..@napis.length
+      napis += "#{klucz["#{@napis[i]}"]}"
+    end
+
+    Jawna.new(napis)
+  end
+end
+
+jawna = Jawna.new("ab")
+szyfr = jawna.zaszyfruj({'a' => 'b',
+                        'b' => 'c'})
+p szyfr.to_s
+

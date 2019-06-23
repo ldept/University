@@ -1,0 +1,101 @@
+#lang racket
+
+
+(define (make-decrementer balance)
+  (lambda (amount)
+    (- balance amount)))
+
+
+(define (make-simplified-withdraw balance)
+  (lambda (amount)
+    (set! balance (- balance amount))
+    balance))
+
+ (define D1 (make-decrementer 25))
+ (define D2 (make-decrementer 25))
+ 
+ (define W1 (make-simplified-withdraw 25))
+ (define W2 (make-simplified-withdraw 25))
+ 
+ (W1 20)
+ (W1 20)
+ (W2 20)
+
+
+(define (factorial n)
+  (let ((product 1)
+        (counter 1))
+    (define (iter)
+      (if (> counter n)
+          product
+          (begin (set! product (* counter product))
+                 (set! counter (+ counter 1))
+                 (iter))))
+    (iter)))
+(define new-withdraw
+  (let ((balance 100))
+    (lambda (amount)
+      (if (>= balance amount)
+          (begin (set! balance (- balance amount))
+                 balance)
+          "Insufficient funds"))))
+
+(define (make-account balance)
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        "Insufficient funds"))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          (else (error "Unknown request -- MAKE-ACCOUNT"
+                       m))))
+  dispatch)
+
+(define acc (make-account 200))
+
+
+(define (lcons x f)
+  (mcons x f))
+
+(define (lhead l)
+  (mcar l))
+
+(define (ltail l)
+  (when (procedure? (mcdr l))
+      (set-mcdr! l ((mcdr l))))
+  (mcdr l))
+
+
+(define (ltake n l)
+  (if (or (null? l) (= n 0))
+      null
+      (cons (lhead l)
+            (ltake (- n 1) (ltail l)))))
+
+(define (lfilter p l)
+  (cond [(null? l) null]
+        [(p (lhead l))
+         (lcons (lhead l)
+                (lambda ()
+                  (lfilter p (ltail l))))]
+        [else (lfilter p (ltail l))]))
+
+(define (lmap f . ls)
+  (if (ormap null? ls) null
+      (lcons (apply f (map lhead ls))
+             (lambda ()
+               (apply lmap (cons f (map ltail ls)))))))
+
+;; ciąg Fibonacciego
+
+(define fib
+  (lcons 0
+         (lambda ()
+           (lcons 1
+                  (lambda ()
+                    (lmap + fib (ltail fib)))))))

@@ -1,0 +1,47 @@
+class Funkcja2
+  def initialize(proc)
+    @proc = proc
+  end
+
+  def value(x,y)
+    @proc.call(x,y)
+  end
+
+  def objetosc(a,b,c,d)
+
+
+  end
+
+  def poziomica(a,b,c,d,wysokosc)
+    e_value = 0.001
+    e_level = 100
+    tab = []
+    step_x = (b-a).fdiv(e_level)
+    step_y = (d-c).fdiv(e_level)
+    x = a
+    y = c
+    i = 0
+    j = 0
+    while i < e_level
+      while j < e_level
+        if (wysokosc - self.value(x,y)).abs < e_value
+          tab << x
+          tab << y
+        end
+        j += 1
+        y += step_y
+      end
+      i += 1
+      x += step_x
+      y = c
+      j = 0
+    end
+
+    tab.each_slice(2).to_a;
+  end
+end
+
+proc = Proc.new{|x,y| x*x + y*y}
+p proc.call(3,4)
+funkcja = Funkcja2.new(proc)
+p funkcja.poziomica(0,20,0,50,4)

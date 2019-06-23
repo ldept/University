@@ -1,0 +1,30 @@
+#Sterowanie
+Strzałki: GÓRA, DÓŁ, LEWO, PRAWO - poruszanie w menu oraz wężem;
+Enter - potwierdza wybór;
+Escape - wyjście z bierzącego podmenu;
+
+#Okno
+Rozdzielczość bazowa: 500x400px;
+Rozdzielczość można zmienić w opcjach, lub powiększając okno za pomocą myszy (niezalecane);
+
+#Dźwięk
+Efekty dźwiękowe oraz muzykę można wyłączyć w opcjach.
+
+#Najlepsze wyniki
+Najlepsze wyniki z poszczególnych trybów można zobaczyć w podmenu "High Scores"
+
+
+#TRYBY GRY
+Legenda:
+"jabłko" - niebieski kwadrat;
+"spowolnienie" - różowy kwadrat;
+"przyspieszenie" - czerwony kwadrat;
+"2x punkty" - bordowy kwadrat; 
+
+1. Endless Mode: Klasyczny "Snake". Zbieramy "jabłka" - wąż staje się dłuższy, dostajemy punkty. Do dyspozycji są także PowerUpy: spowolnienie, przyspieszenie i 2x punkty. które pojawiają się odpowiednio co 5,15 i 10 zdobytych punktów.
+
+2. Time Fever Mode: "Snake" z dreszczykiem emocji. Dodatkowo odliczany jest czas (na początku do 20sek.), po którym kończy się gra. Zbierając jabłka można odwlec nieuniknioną zgubę o 3sek.
+
+3. Wall Attack Mode: klaustrofobiczny "Snake" z nutką niepewności. Co określoną liczbę punktów zwiększa się ilość, śmiertelnie groźnych, ścianek na planszy, które w najmniej oczekiwanym momencie mogą szybko zakończyć rozgrywkę zamykając między sobą jabłko (zabieg celowy).
+
+

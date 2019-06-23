@@ -1,0 +1,64 @@
+class Funkcja
+  def initialize(proc)
+    @proc = proc
+  end
+  def value(x) #wartosc funkcji w punkcie x
+    @proc.call(x)
+  end
+
+  def zerowe(a,b,e) #miejsce zerowe z dokladnoscia do e
+=begin
+    e = 0.000001
+    step_x = (b-a) * e
+    ilosc = (b-a) / step_x
+    x = a
+    tab = []
+    i = 0
+    while i < ilosc
+      if (self.value(x)).abs < e
+        tab << x
+      end
+      x += step_x
+      i += 1
+    end
+    tab
+=end
+
+    x0 = (a + b).fdiv(2)
+
+    if (self.value(x0)).abs <= e
+      x0
+
+    elsif (self.value(a) * self.value(x0)) < 0
+        self.zerowe(a,x0,e)
+
+    elsif (self.value(b) * self.value(x0)) < 0
+      self.zerowe(x0,b,e)
+    end
+
+  end
+
+  def pole(a,b) #calka oznaczona na przedziale ab
+    n = 100 #przyblizenie
+    x = (b-a).fdiv(n)
+    srodek = a + x.fdiv(2)
+    i = 0
+    suma = 0.0
+    while i < n
+      suma += self.value(srodek)
+      srodek += x
+      i += 1
+    end
+    suma * x
+
+  end
+  def poch(x) #przyblizona wartosc pochodnej
+    h = 0.0001
+    (self.value(x+h) - self.value(x)) / h
+  end
+end
+p = Proc.new{|n| n*n - 4  }
+proc = Funkcja.new(p)
+  p proc.zerowe(0,5,0.1)
+ p proc.pole(5,200)
+p proc.poch(3)

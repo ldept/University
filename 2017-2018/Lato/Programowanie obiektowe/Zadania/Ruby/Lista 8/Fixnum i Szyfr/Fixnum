@@ -1,0 +1,67 @@
+class Fixnum
+  def czynniki
+    tab = []
+    (1..self).each do |i|
+      tab << i if (self % i).zero?
+    end
+    return tab
+  end
+
+  def ack(m)
+    if self.zero?
+      m + 1
+    elsif m == 0
+      (self - 1).ack(1)
+    else
+      (self - 1).ack(self.ack(m - 1))
+    end
+  end
+
+  def doskonala
+    ((self.czynniki.sum - self) == self)
+  end
+
+  def slownie
+
+    i = self
+    res = ""
+    while i > 0 do
+      r = i % 10
+      case r
+      when 0
+        res = "zero" + res
+      when 1
+        res = "jeden" + res
+      when 2
+        res = "dwa" + res
+      when 3
+        res = "trzy" + res
+      when 4
+        res = "cztery" + res
+      when 5
+        res = "piec" + res
+      when 6
+        res = "szesc" + res
+      when 7
+        res = "siedem" + res
+      when 8
+        res = "osiem" + res
+      when 9
+        res = "dziewiec" + res
+      end
+      if i > 10
+        res = " " + res
+      end
+      i = i / 10
+    end
+    res
+  end
+end
+
+p 2.ack(1)
+
+p 6.czynniki
+
+p 100.doskonala
+
+p 123.slownie

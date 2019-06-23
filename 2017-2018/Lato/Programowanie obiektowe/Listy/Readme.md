@@ -1,0 +1,1 @@
+Listy są z roku 2019, ale zadania były podobne (jeśli nie takie same)
