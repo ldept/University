@@ -5,11 +5,15 @@
 - Kurs: Wstęp do Programowania w C
 - Kurs: Podstawowy Warsztat Informatyka
 
+- Project: Snake in C
+
 ### Semestr Letni 2017/2018:
 - Algebra
 - Metody Programowania
 - Kurs języka C++
 - Programowanie Obiektowe
+
+- "Project": Budget planer in Java
 
 ### Semestr Zimowy 2018/2019:
 - Analiza Numeryczna (L)
@@ -24,3 +28,5 @@
 - Architektury Systemów Komputerowych
 - Rachunek Prawdopodobieństwa i Statystyka
 - O ekonomii i gospodarce inaczej
+
+- Project: Political Party Database Management System (PostgreSQL and Python3)
