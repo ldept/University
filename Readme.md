@@ -3,17 +3,16 @@
 - Analiza Matematyczna
 - Wstęp do Informatyki
 - Kurs: Wstęp do Programowania w C
+    - Project: Snake in C (Allegro library)
 - Kurs: Podstawowy Warsztat Informatyka
 
-- Project: Snake in C
 
 ### Semestr Letni 2017/2018:
 - Algebra
 - Metody Programowania
 - Kurs języka C++
 - Programowanie Obiektowe
-
-- "Project": Budget planer in Java
+    - "Project": Budget planer in Java
 
 ### Semestr Zimowy 2018/2019:
 - Analiza Numeryczna (L)
@@ -25,8 +24,7 @@
 ### Semestr Letni 2018/2019:
 - Algorytmy i Struktury Danych (L)
 - Bazy Danych
+    - Project: Political Party Database Management System (PostgreSQL and Python3)
 - Architektury Systemów Komputerowych
 - Rachunek Prawdopodobieństwa i Statystyka
 - O ekonomii i gospodarce inaczej
-
-- Project: Political Party Database Management System (PostgreSQL and Python3)
