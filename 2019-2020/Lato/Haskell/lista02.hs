@@ -12,8 +12,8 @@ intercalate xs [ys]     = ys
 intercalate xs (ys:yss) = ys ++ xs ++ (intercalate xs yss)
 
 transpose :: [[a]] -> [[a]]
-transpose ([]:_) = []
-transpose x = (map head x) : transpose (map tail x)
+transpose [] = []
+transpose x = (map head x) : transpose (filter (not . null) (map tail x))
 
 concat :: [[a]] -> [a]
 concat []       = []
@@ -67,7 +67,7 @@ prodM :: Num a => Matrix a -> Matrix a -> Matrix a
 prodM (Matrix [])       (Matrix [])       = Matrix []
 prodM (Matrix [xs])     (Matrix [])       = undefined
 prodM (Matrix [])       (Matrix [ys])     = undefined
-prodM (Matrix xss) (Matrix yss) =  Matrix([[ sum $ zipWith (*) xs ys | ys <- (transpose yss) ] | xs <- xss] )
+prodM (Matrix xss) (Matrix yss)           = Matrix([[ sum $ zipWith (*) xs ys | ys <- (transpose yss) ] | xs <- xss] )
     
 t1 = fromMatrix $ prodM (Matrix [[1,2,3], [4,5,6]]) (Matrix [[7,8], [9,10], [11,12]])
 -- Zadanie 4
