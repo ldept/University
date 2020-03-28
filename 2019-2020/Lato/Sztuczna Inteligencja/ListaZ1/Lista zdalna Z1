@@ -1,0 +1,57 @@
+Zadanie 1
+
+1. Pokaż przykład obrazka, który ma dokładnie 2 rozwiązania:
+    Ten obrazek składa się z dwóch bloków o długości 1. (Sprowadzamy to do rozwiązania obrazka 2 x 2, gdzie przy każdej kolumnie i wierszu jest cyfra 1 - wtedy możliwe są tylko 2 różne rozwiązania) 
+
+	  1 | 1 | 0 | 0 | ,,, | 0                    | 1 | 1 | 0 | 0 | ... | 0
+  1 | X |   |                                  1 |   | X |
+  - | - | - | -                                - | - | - | - 
+  1 |   | X |                                  1 | X |   |
+  - | - | - | -                                - | - | - | - 
+  0 |   |   |                                  0 |
+  - | - | - | -                                - |
+  .                                            .
+  .                                            .
+  .                                            .
+  -                                            - |
+  0                                            0 |
+  
+2. Pokaż przykład obrazka, który ma więcej niż N rozwiązań:
+    To obrazek, w którym w każdej kolumnie i w każym wierszu jest po jednym bloku o długości 1.
+Mamy wtedy N! rozwiązań
+     1 | 1 | 1 | 1 | ... | 1
+ 1 |
+ - |
+ 1 |
+ - |
+ 1 |
+ -
+ .
+ .
+ .
+ -
+ 1 |
+ 
+ 
+ 
+Zadanie 2
+
+ Stan: 
+ - Pozycja auta w grafie
+ - Pozostała ilość paliwa w baku
+
+ Stan początkowy: 
+ - Auto w pozycji startowej (konkretny wierzchołek)
+ - Pełny bak
+ 
+ Stan końcowy:
+ - Auto w pozycji końcowej (konkretny wierzchołek)
+ - Pozostała ilość paliwa w baku >= 0
+ 
+ Model:
+ - Przemieszczenie się auta między miastem (wierzchołkiem) A, a miastem B jeżeli istnieje między nimi połączenie (krawędź) i waga krawędzi jest mniejsza od ilości paliwa w baku. 
+ - Ilość paliwa w baku nie może spaść poniżej 0. 
+ - Przy dotarciu do wierzchołka, w którym znajduje się stacja benzynowa następuje napełnienie baku do pełna.
+ 
+ Koszt: 
+ - Waga krawędzi

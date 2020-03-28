@@ -1,236 +1,121 @@
--- Łukasz Deptuch,
--- Lista 01, 10.03.2020
-
-import Prelude hiding(concat, and, all, maximum, transform)
-import Data.Char (digitToInt) -- do zadania 4
-import Data.Function (on)
+-- Łukasz Deptuch
+-- Kurs języka Haskell
+-- Lista 2, 20.03.2020
+{-# LANGUAGE ParallelListComp #-}
 
 -- Zadanie 1
+spermC :: [a] -> [[a]]
+spermC [] = [[]]
+spermC xs = [ y:zs | (y,ys) <- select xs, zs <- spermC ys ] 
+    where
+        select [y] = [(y,[])]
+        select (y:ys) = (y, ys) : [ (z, y:zs) | (z,zs) <- select ys ]
 
--- insert xs inbetween yss' lists
-intercalate :: [a] -> [[a]] -> [a]
-intercalate xs []       = [] 
-intercalate xs [ys]     = ys
-intercalate xs (ys:yss) = ys ++ xs ++ (intercalate xs yss)
+ipermC :: [a] -> [[a]]
+ipermC [] = [[]]
+ipermC (x:xs) = concat [ insert ys | ys <- ipermC xs ] 
+    where
+        insert [] = [[x]]
+        insert ys'@(y:ys) = (x:ys') : [ y:y' | y' <- insert ys]
 
-transpose :: [[a]] -> [[a]]
-transpose [] = []
-transpose x = (map head x) : transpose (filter (not . null) (map tail x))
+qsortC :: Ord a => [a] -> [a]
+qsortC [] = []
+qsortC (x:xs) = qsortC [ y | y <- xs, y <= x] ++ [x] ++ qsortC [ y | y <- xs, y > x]
 
-concat :: [[a]] -> [a]
-concat []       = []
-concat [x]      = x
-concat (xs:xss) = xs ++ (concat xss)
+subseqC :: [a] -> [[a]]
+subseqC [] = [[]]
+subseqC (x:xs) = [x:subseq | subseq <- subseqC xs] ++ subseqC xs
 
-and :: [Bool] -> Bool
-and xs = foldr (&&) True xs --foldl'
-
-all :: (a -> Bool) -> [a] -> Bool
-all f xs = foldr (\x acc -> acc && f x) True xs
-        -- flip foldr True . (flip (&&) .)
-
-maximum :: [Integer] -> Integer
-maximum xs = foldr1 max xs
-
+zipC :: [a] -> [b] -> [(a,b)]
+zipC xs ys = [(x,y) | x <- xs | y <- ys]
 
 
--- Zadanie 2
-newtype Vector a = Vector { fromVector :: [a] }
+-- Zadanie 3
+data Combinator = S | K | Combinator :$ Combinator
+infixl :$
 
-scaleV :: Num a => a -> Vector a -> Vector a
-scaleV a vec = Vector $ map (a *) $ fromVector vec
+instance Show Combinator where
+    show S = "S"
+    show K = "K"
+    show (left_c :$ right_c@(_ :$ _)) = show left_c ++ "(" ++ show right_c ++ ")"
+    show (left_c :$ right_c)          = show left_c ++ show right_c
 
-norm :: Floating a => Vector a -> a
-norm vec = sqrt $ foldr (\x acc -> acc + x**2) 0 $ fromVector vec -- sum . map(**2)
-
-scalarProd :: Num a => Vector a -> Vector a -> a
-scalarProd (Vector [])     (Vector [])     = 0
-scalarProd (Vector [x])    (Vector [])     = error "zly rozmiar"
-scalarProd (Vector [])     (Vector [y])    = error "zly rozmiar"
-scalarProd (Vector (x:xs)) (Vector (y:ys)) = x*y + scalarProd (Vector xs) (Vector ys) 
-
-sumV :: Num a => Vector a -> Vector a -> Vector a
-sumV (Vector [])     (Vector [])     = Vector []
-sumV (Vector [x])    (Vector [])     = error "zly rozmiar"
-sumV (Vector [])     (Vector [y])    = error "zly rozmiar"
-sumV (Vector (x:xs)) (Vector (y:ys)) = Vector $ (x+y) : fromVector (sumV (Vector xs) (Vector ys))
-
-
--- Zadanie 3    
-newtype Matrix a = Matrix { fromMatrix :: [[a]] }
-
-sumM :: Num a => Matrix a -> Matrix a -> Matrix a
-sumM (Matrix [])          (Matrix [])          = Matrix []
-sumM m1@(Matrix (xs:xss)) m2@(Matrix (ys:yss)) = if is_correct_size 
-                                                 then Matrix $ row : (fromMatrix (sumM (Matrix xss) (Matrix yss))) 
-                                                 else error "size mismatch" where
-    row = zipWith (+) xs ys
-    is_correct_size = sizeM m1 == sizeM m2
-
-prodM :: Num a => Matrix a -> Matrix a -> Matrix a
-prodM    (Matrix [])     (Matrix [])       = Matrix []
-prodM m1@(Matrix xss) m2@(Matrix yss)      
-    |   is_correct_size = Matrix $ [ [ sum $ zipWith (*) xs ys | ys <- (transpose yss) ] | xs <- xss]
-    |   otherwise       = error "size mismatch" where
-        
-        is_correct_size =   all_equal m1_size_list 
-                            && all_equal m2_size_list
-                            && are_multiplicable m1_size_list m2_size_list
-        m1_size_list = sizeM m1
-        m2_size_list = sizeM m2
-        all_equal [x,y] = x == y -- check if all rows are of equal lengths
-        all_equal (x:y:xs) = x == y && all_equal (y:xs)
-        are_multiplicable m1 m2 = head m1 == length m2
-
-
-
-sizeM :: Matrix a -> [Int]
-sizeM (Matrix []) = []
-sizeM (Matrix [xs]) = length xs : []
-sizeM (Matrix (xs:xss)) = length xs : (sizeM (Matrix xss))
-
--- det :: Num a => Matrix a -> a
--- det (Matrix [])    = 0
--- det m@(Matrix xss) = if is_correct_size
---                      then calc_det
---                      else error "size mismatch" where
---                         is_correct_size = all_equal m_size && head m_size == length m_size
---                         m_size = sizeM xss
---                         calc_det = 42 
-
-
-t0 = fromMatrix $ sumM  (Matrix [[1,2,3], [4,5,6]]) (Matrix [[7,8], [9,10], [11,12]])
-t1 = fromMatrix $ prodM (Matrix [[1,2,3], [4,5,6]]) (Matrix [[7,8], [9,10], [11,12]])
-
-
--- Zadanie 4
-isbn13_check :: String -> Bool
-isbn13_check str =  (sum nums_even_index + sum nums_odd_index) `mod` 10 == 0  where
-    nums            = map digitToInt $ filter (/= '-') str -- transform string to list of digits
-    nums_with_index = zip [x | x <- [0..12]] nums
-    nums_even_index = [ x | (i,x) <- nums_with_index, i `mod` 2 == 0 ]
-    nums_odd_index  = [ 3*x | (i,x) <- nums_with_index, i `mod` 2 /= 0 ]
-
-
+ 
 -- Zadanie 5
-newtype Natural = Natural { fromNatural :: [Word] }
+data BST a = NodeBST (BST a) a (BST a) | EmptyBST deriving (Show)
 
-base :: Word
+searchBST :: Ord a => a -> BST a -> Maybe a
+searchBST _ EmptyBST = Nothing
+searchBST v (NodeBST left x right)
+    | v == x = Just v
+    | v <  x = searchBST v left
+    | v >  x = searchBST v right
 
+
+insertBST :: Ord a => a -> BST a -> BST a
+insertBST v EmptyBST = NodeBST EmptyBST v EmptyBST
+insertBST x (NodeBST left v right)
+    | x == v = NodeBST left v right --bez powtórzeń
+    | x <  v = NodeBST (insertBST x left) v right
+    | x >  v = NodeBST left v (insertBST x right)
+
+-- Zadanie 6
+
+deleteMaxBST :: Ord a => BST a -> (BST a, a)
+deleteMaxBST EmptyBST = error "deleteMax operation on empty tree"
+deleteMaxBST (NodeBST EmptyBST x EmptyBST) = (EmptyBST, x)
+deleteMaxBST (NodeBST t1 x EmptyBST) = (t1, x)
+deleteMaxBST (NodeBST t1 x t2) = (NodeBST t1 x t2deleted, max) where
+    (t2deleted, max) = deleteMaxBST t2 
+
+-- deleteMaxBST tree = ((deleteBST x tree), x) where
+--     x = findMaxBST tree
+
+-- findMaxBST :: Ord a => BST a -> a
+-- findMaxBST EmptyBST = error "deleteMax operation on empty tree"
+-- findMaxBST (NodeBST _ x EmptyBST) = x
+-- findMaxBST (NodeBST _ _ right) = findMaxBST right
+
+deleteBST :: Ord a => a -> BST a -> BST a
+deleteBST _ EmptyBST = EmptyBST
+deleteBST x (NodeBST EmptyBST v right)
+    | x == v = right
+    |otherwise = NodeBST EmptyBST v (deleteBST x right)
+deleteBST x (NodeBST left v EmptyBST)
+    | x == v = left
+    | otherwise = NodeBST (deleteBST x left) v EmptyBST
+deleteBST x tree@(NodeBST left v right)
+    | x == v = NodeBST new_left new_v right -- naprawiamy drzewo usuwając max z lewego poddrzewa i wstawiając go w miejsce v
+    | x >  v = NodeBST left v (deleteBST x right)
+    | x <  v = NodeBST (deleteBST x left) v  EmptyBST where
+        (new_left,new_v) = deleteMaxBST left
+
+
+-- test BST trees
+t_BST = NodeBST (NodeBST EmptyBST 6 (NodeBST EmptyBST 7 EmptyBST)) 9 (NodeBST EmptyBST 10 EmptyBST)
 
 
 -- Zadanie 7
-instance Eq Natural where
-    (==) = (==) `on` fromNatural
-
-instance Ord Natural where
-    (Natural xs) <= (Natural ys) = compare (reverse xs) (reverse ys)
-      where
-        compare :: [Word] -> [Word] -> Bool
-        compare [] _ = True
-        compare _ [] = False
-        compare (x:xs) (y:ys) = x <= y && compare xs ys
+data Tree23 a =   Node2 (Tree23 a) a (Tree23 a)
+                | Node3 (Tree23 a) a (Tree23 a) a (Tree23 a)
+                | Empty23 deriving(Show)
 
 
--- Zadanie 10
+search23 :: Ord a => a -> Tree23 a -> Maybe a
+search23 _ Empty23 = Nothing
+search23 x (Node2 left v right)
+    | x == v = Just x
+    | x <  v = search23 x left
+    | x >  v = search23 x right
+search23 x (Node3 left v middle u right)
+    | x == v || x == u = Just x
+    | x < v = search23 x left
+    | x < u = search23 x middle
+    | x > u = search23 x right
 
--- val1 = (.)(.)
--- 1(.) :: (b -> c) -> ((a -> b) -> a -> c) // strzałki wiążą w prawo
--- 2(.) jest wrzucane do 1(.) jako (b -> c), czyli:
--- (b -> c) = (b1 -> c1) -> (a1 -> b1) -> a1 -> c1
--- stąd i z tego że strzałki wiążą w prawo
--- b = (b1 -> c1)
--- c = (a1 -> b1) -> a1 -> c1
--- teraz wynik jest typu ((a -> b) -> a -> c) - podstawiamy b i c
--- (a -> (b1 -> c1)) -> a -> (a1 -> b1) -> a1 -> c1
--- val1 :: (a -> b1 -> c1) -> a -> (a1 -> b1) -> a1 -> c1
 
--- val2 = (.)($)
--- ($) :: (a1 -> b1) -> (a1 -> b1)
--- podobnie jak wyżej
--- b = (a1 -> b1) 
--- c = (a1 -> b1)
--- podstawiamy b i c do typu (.)
--- (a -> (a1 -> b1)) -> a -> (a1 -> b1)
--- val2 :: (a -> a1 -> b1) -> a -> a1 -> b1
+-- test 2-3 trees
+t23_2 = Node3 Empty23 4 Empty23 6 Empty23
+t23_3 = Node3 (Node2 Empty23 8 Empty23) 9 (Node2 Empty23 10 Empty23) 11 Empty23
 
--- val3 = ($)(.)
--- ($) to identyczność na funkcjach
--- val3 :: (b -> c) -> (a -> b) -> a -> c
-
--- val4 = flip flip
--- flip :: (a -> b -> c) -> b -> a -> c
--- po prostu zamieniamy kolejność argumentów
--- val4 :: b -> (a -> b -> c) -> a -> c
-
--- val5 = (.)(.)(.)
--- (.)(.) :: (a -> b1 -> c1) -> a -> (a1 -> b1) -> a1 -> c1     //z poprzednich podpunktów
--- (.) :: (b2 -> c2) -> (a2 -> b2) -> a2 -> c2
--- a = (b2 -> c2)
--- b1 = (a2 -> b2)
--- c1 = (a2 -> c2)
--- val5 :: (b2 -> c2) -> (a1 -> a2 -> b2) -> a1 -> a2 -> c2
-
--- val6 = (.)($)(.)
--- (.) :: (b -> c) -> ((a -> b) -> (a -> c))
--- ($) :: (a1 -> b1) -> (a1 -> b1)
--- stąd:
--- (.)($) :: (a -> a1 -> b1) -> (a -> a1 -> b1)
--- (.) = (b2 -> c2) -> (a2 -> b2) -> a2 -> c2
--- a  = (b2 -> c2)
--- a1 = (a2 -> b2)
--- b1 = (a2 -> c2)
--- (b2 -> c2) -> (a2 -> b2) -> (a2 -> c2)
--- val6 :: (b2 -> c2) -> (a2 -> b2) -> a2 -> c2
-
--- val7 = ($)(.)(.)
--- ($)(.) :: (b -> c) -> (a -> b) -> a -> c     //identyczność
--- sprowadza się do (.)(.) z podpunktu wyżej
--- val7 ::  (a -> b1 -> c1) -> a -> (a1 -> b1) -> a1 -> c1
-
--- val8 = flip flip flip
--- flip :: (a -> b -> c) -> b -> a -> c
--- zamieniamy miejscami
--- flip flip :: b1 -> (a1 -> b1 -> c1) -> a1 -> c1
--- b1 = (a -> b -> c) -> b -> a -> c
--- val8 :: (a1 -> ((a -> b -> c) -> b -> a -> c) -> c1) -> a1 -> c1
-
--- val9 = tail $ map tail [[], ['a']]
--- map :: (a -> b) -> [a] -> [b]
--- tail :: [a] -> [a]
--- [[], ['a']] :: [[Char]]
--- map tail [[], ['a']] :: [[Char]]
--- tail $ map tail [[], ['a']] :: [[Char]]
--- val9 :: [[Char]]
-
--- val10 = let x = x in x x
--- val10 :: a ???
-
--- val11 = (\_ -> 'a') (head [])
--- head :: [a] -> a
--- head [] :: a
--- \_ -> 'a' :: a1 -> Char
--- val11 :: Char
-
--- val12 = (\(_,_) -> 'a') (head [])
--- head [] :: a
--- \(_,_) -> 'a' :: (a1, b) -> Char
--- a = (a1, b)
--- val12 :: Char
-
--- val13 = map map
--- map :: (a -> b) -> [a] -> [b]
--- a = (a1 -> b1)
--- b = [a1] -> [b1]
--- val13 :: [a1 -> b1] -> [[a1] -> [b1]]
-
--- val14 = map flip
--- flip :: (a -> b -> c) -> b -> a -> c
--- map :: (a1 -> b1) -> [a1] -> [b1]
--- a1 = a -> b -> c
--- b1 = b -> a -> c
--- val14 :: [a -> b -> c] -> [b -> a -> c]
-
--- val15 = flip map
--- zamieniony miejscami map
--- val15 :: [a] -> (a -> b) -> [b]
+t23_4 = Node2 (Node3 Empty23 4 Empty23 6 Empty23) 7 (Node3 (Node2 Empty23 8 Empty23) 9 (Node2 Empty23 10 Empty23) 11 Empty23)
